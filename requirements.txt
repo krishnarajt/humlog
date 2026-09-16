@@ -23,7 +23,7 @@ fractional-indexing==0.1.3
 # Markdown -> HTML for the HTML export, and a sanitiser over the result so an
 # exported post can be opened in a browser without trusting its author.
 Markdown==3.5.2
-bleach==6.1.0
+bleach==6.4.0
 
 # Validation. email-validator is what makes pydantic's EmailStr work, and an
 # address that never arrives is an account with no way back into it.
