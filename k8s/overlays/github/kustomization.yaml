@@ -9,4 +9,4 @@ resources:
 images:
   - name: humlog
     newName: ghcr.io/krishnarajt/humlog
-    newTag: git-initial
+    newTag: git-84ad3777e4cad8a7db2915659dbcbaea21ce7768
