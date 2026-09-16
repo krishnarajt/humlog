@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: humlog
+spec:
+  # One. The rate limiter that stands in front of the anonymous comment
+  # endpoint keeps its counters in process (app/api/rate_limit.py), so a
+  # second replica would quietly double every limit. Scaling out means moving
+  # those counters to Redis first.
+  replicas: 1
+  selector:
+    matchLabels:
+      app: humlog
+  template:
+    metadata:
+      labels:
+        app: humlog
+    spec:
+      containers:
+        - name: app
+          image: humlog
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+              name: http
+
+          envFrom:
+            - secretRef:
+                name: humlog-env
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"

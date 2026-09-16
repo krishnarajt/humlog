@@ -1,0 +1,24 @@
+# Alternative to argocd-app.yaml, which tracks the Gitea repo/overlay.
+# Apply only one of the two: both render the same Deployment, Service and
+# NodePort 32041 into humlog, so running both leaves two self-healing
+# Applications fighting over the same resources.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+    name: humlog-github
+    namespace: argocd
+spec:
+    project: default
+    source:
+        repoURL: https://github.com/krishnarajt/humlog
+        targetRevision: main
+        path: k8s/overlays/github
+    destination:
+        server: https://kubernetes.default.svc
+        namespace: humlog
+    syncPolicy:
+        automated:
+            prune: true
+            selfHeal: true
+        syncOptions:
+            - CreateNamespace=true

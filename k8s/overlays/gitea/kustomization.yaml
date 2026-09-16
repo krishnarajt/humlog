@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: humlog
+
+resources:
+  - ../../base
+
+images:
+  - name: humlog
+    newName: git.krishnarajthadesar.in/krishnaraj/humlog
+    newTag: git-b2ab17312a927ce2b7e1960a8df5ce61f72493c2

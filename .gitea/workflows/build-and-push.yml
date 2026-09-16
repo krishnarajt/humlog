@@ -1,0 +1,49 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "k8s/overlays/gitea/kustomization.yaml"
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Login to Gitea Container Registry
+        run: |
+          echo "${{ secrets.REGISTRY_TOKEN }}" | docker login 100.69.148.22:4014 \
+            -u "${{ gitea.actor }}" \
+            --password-stdin
+
+      - name: Build and Push Docker Image
+        run: |
+          docker build \
+            -t 100.69.148.22:4014/${{ gitea.repository_owner }}/humlog:git-${{ gitea.sha }} \
+            .
+
+          docker push \
+            100.69.148.22:4014/${{ gitea.repository_owner }}/humlog:git-${{ gitea.sha }}
+
+      - name: Update Gitea Kubernetes overlay
+        run: |
+          sed -i \
+            's/newTag: .*/newTag: git-${{ gitea.sha }}/' \
+            k8s/overlays/gitea/kustomization.yaml
+
+      - name: Commit Kubernetes manifest
+        run: |
+          git config user.name "gitea-actions"
+          git config user.email "gitea-actions@localhost"
+          git add k8s/overlays/gitea/kustomization.yaml
+          git commit -m "chore(deploy): gitea git-${{ gitea.sha }}"
+          git push

@@ -1,0 +1,38 @@
+# Core Framework
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+python-multipart==0.0.6
+
+# Database
+sqlalchemy==2.0.25
+psycopg2-binary==2.9.9
+alembic==1.13.1
+
+# Authentication
+pyjwt==2.8.0
+
+# Object Storage (S3/MinIO) — pasted images are the one thing hum.log accepts
+# from the clipboard, and they live here rather than in Postgres.
+boto3==1.34.34
+
+# Block ordering. A port of the fractional-indexing algorithm: keys are
+# strings, a key can always be generated between any two others, and no other
+# row moves when one block does. See app/blocks/ordering.py.
+fractional-indexing==0.1.3
+
+# Markdown -> HTML for the HTML export, and a sanitiser over the result so an
+# exported post can be opened in a browser without trusting its author.
+Markdown==3.5.2
+bleach==6.1.0
+
+# Validation. email-validator is what makes pydantic's EmailStr work, and an
+# address that never arrives is an account with no way back into it.
+pydantic==2.5.3
+email-validator==2.1.1
+pydantic-settings==2.1.0
+
+# Environment variables
+python-dotenv==1.0.0
+
+# For production
+gunicorn==21.2.0

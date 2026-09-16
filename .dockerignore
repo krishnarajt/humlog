@@ -1,0 +1,16 @@
+.git
+.github
+.gitea
+.venv
+venv
+__pycache__
+**/__pycache__
+*.pyc
+.pytest_cache
+tests
+logs
+k8s
+*.db
+.env
+README.md
+BLOG.md
