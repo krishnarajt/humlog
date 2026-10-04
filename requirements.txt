@@ -9,7 +9,7 @@ psycopg2-binary==2.9.9
 alembic==1.13.1
 
 # Authentication
-pyjwt==2.8.0
+pyjwt==2.15.0
 
 # Object Storage (S3/MinIO) — pasted images are the one thing hum.log accepts
 # from the clipboard, and they live here rather than in Postgres.
